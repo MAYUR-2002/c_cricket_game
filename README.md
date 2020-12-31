@@ -1,0 +1,2 @@
+# c_cricket_game
+PROJECT IN C , FOR CRICKET SCORE SHEET .
