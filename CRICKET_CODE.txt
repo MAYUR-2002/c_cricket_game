@@ -1,0 +1,161 @@
+#include<string.h>
+#include<stdio.h>
+
+char DATE[10];
+char TIME[5];
+int over;
+int extra;
+
+struct batsman
+{
+    char strike[25];
+    char name[25];
+    char runs[25];
+}bat[5];
+
+struct bowler
+{
+    char economy[25];
+    char name[25];
+    char wickets[25];
+}bowl[5];
+
+int main()
+{
+
+    int choice;
+    printf("\t\t\t\t\t\tCRICKET SCORE SHEET PROJECT\n");
+    printf("\t\t\t\t\t\tDeveloped by \n");
+    printf("\t\t\t\t\t\tRushil, Soham, Mayur, Sharmad\n\n\n");
+    menu:
+    printf("Press 1 for new score sheet\n");
+    printf("Press 2 to view a score sheet\n");
+    printf("Press 3 to EXIT\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+    switch (choice)
+    {
+    case 1:
+    {
+        date();
+        newscoresheet();
+
+        break;
+    }
+    case 2:
+    {
+        fileread();
+        break;
+    }
+    case 3:
+    {
+        return 0;
+        break ;
+    }
+    default:
+    {
+        printf("\nInvalid response...\n\n");
+        goto menu;
+    }
+    }
+}
+void date()
+{
+    printf("Enter date (DD/MM/YYYY): ");
+    scanf("%s", &DATE);
+    printf("Enter time (hh:mm): ");
+    scanf("%s", &TIME);
+}
+void newscoresheet()
+{
+    char filename[25];
+    printf("Enter the name of scoresheet: ");
+    scanf("%s", &filename);
+    strcat(filename, ".txt\0");
+    printf("Enter the number of overs: ");
+    scanf("%d", &over);
+    printf("Enter the number of extra overs: ");
+    scanf("%d", &extra);
+    for(int i = 0; i < 5; i++)
+    {
+        printf("Enter batsman %d name, strike rate and runs: ", i + 1);
+        scanf("%s %s %s", &bat[i].name, &bat[i].strike, &bat[i].runs);
+    }
+    for(int i = 0; i < 5; i++)
+    {
+        printf("Enter bowler %d name, economy and wickets: ", i + 1);
+        scanf("%s %s %s", &bowl[i].name, &bowl[i].economy, &bowl[i].wickets);
+    }
+
+
+    filewrite(filename);
+    printf("\n\n\n\n");
+    printt();
+}
+
+void fileread()
+{
+   FILE *fp;
+   char filename[25];
+   printf("Enter the name of scoresheet: ");
+   scanf("%s", &filename);
+   strcat(filename, ".txt\0");
+   char readdata[100];
+   fp = fopen(filename, "r");
+   while( fgets(readdata,100,fp)!= NULL )
+    {
+        printf("%s",readdata);
+    }
+
+   fclose(fp);
+}
+
+void printt()
+{
+    printf("------------------------------\n");
+    printf("Overs: %d\n", over);
+    printf("Extra Overs: %d\n", extra);
+    printf("Date: %s\n", DATE);
+    printf("Time: %s\n", TIME);
+    printf("------------------------------\n");
+    printf("\nBatsman\tStrike\tRuns\n");
+    printf("------------------------------\n");
+    for(int i = 0; i < 5; i++)
+    {
+        printf("%s\t%s\t%s\n", bat[i].name, bat[i].strike, bat[i].runs);
+    }
+    printf("------------------------------\n");
+    printf("\nBowler\tEconomy\tWickets\n");
+    for(int i = 0; i < 6; i++)
+    {
+        printf("%s\t%s\t%s\n", bowl[i].name, bowl[i].economy, bowl[i].wickets);
+    }
+}
+
+void filewrite(char filename[])
+{
+    FILE *f;
+    f = fopen(filename, "w+");
+    fprintf(f, "------------------------------\n");
+    fprintf(f, "Overs: %d\n", over);
+    fprintf(f, "Extra Overs: %d\n", extra);
+    fprintf(f, "Date: %s\n", DATE);
+    fprintf(f, "Time: %s\n", TIME);
+    fprintf(f, "------------------------------\n");
+    fputs("Batsman\tStrike\tRuns\n", f);
+    fprintf(f, "------------------------------\n");
+    printf("\nBatsman\tStrike\tRuns\n");
+    for(int i = 0; i < 5; i++)
+    {
+        printf("%s\t%s\t%s\n", bat[i].name, bat[i].strike, bat[i].runs);
+        fprintf(f, "%s\t%s\t%s\n", bat[i].name, bat[i].strike, bat[i].runs);
+    }
+    fputs("\nBowler\tEconomy\tWickets\n", f);
+    fprintf(f, "------------------------------\n");
+    for(int i = 0; i < 6; i++)
+    {
+        printf("%s\t%s\t%s\n", bowl[i].name, bowl[i].economy, bowl[i].wickets);
+        fprintf(f, "%s\t%s\t%s\n", bowl[i].name, bowl[i].economy, bowl[i].wickets);
+    }
+    fclose(f);
+}
